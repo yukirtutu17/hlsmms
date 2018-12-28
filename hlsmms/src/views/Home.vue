@@ -1,7 +1,13 @@
 <template>
   <el-container id="home">
     <!-- 左侧 导航菜单-->
-    <el-aside width="200px">
+    <el-aside width="230px">
+      <!-- 左侧顶部的标题 -->
+      <div id="leftTitle">
+        <h1>华联超市管理系统</h1>
+        <p>你好，Admin</p>
+        <p><a>管理首页</a> | <a>退出系统</a></p>
+      </div>
       <!-- 左侧菜单 -->
       <el-menu
         default-active="2"
@@ -13,7 +19,7 @@
         <!-- 第1个菜单 -->
         <el-submenu index="1">
           <template slot="title">
-            <i class="el-icon-location"></i>
+            
             <span>分类管理</span>
           </template>
           <el-menu-item index="1-1">分类管理</el-menu-item>
@@ -23,7 +29,7 @@
         <!-- 第2个菜单 -->
         <el-submenu index="2">
           <template slot="title">
-            <i class="el-icon-location"></i>
+            
             <span>商品管理</span>
           </template>
           <el-menu-item index="1-1">商品管理</el-menu-item>
@@ -33,7 +39,7 @@
         <!-- 第3个菜单 -->
         <el-submenu index="3">
           <template slot="title">
-            <i class="el-icon-location"></i>
+            
             <span>进货管理</span>
           </template>
           <el-menu-item index="1-1">库存管理</el-menu-item>
@@ -43,7 +49,7 @@
         <!-- 第4个菜单 -->
         <el-submenu index="4">
           <template slot="title">
-            <i class="el-icon-location"></i>
+            
             <span>出货管理</span>
           </template>
           <el-menu-item index="1-1">销售列表</el-menu-item>
@@ -54,7 +60,7 @@
         <!-- 第5个菜单 -->
         <el-submenu index="5">
           <template slot="title">
-            <i class="el-icon-location"></i>
+            
             <span>统计管理</span>
           </template>
           <el-menu-item index="1-1">销售统计</el-menu-item>
@@ -64,17 +70,17 @@
         <!-- 第6个菜单 -->
         <el-submenu index="6">
           <template slot="title">
-            <i class="el-icon-location"></i>
+            
             <span>账号管理</span>
           </template>
           <el-menu-item index="1-1">账号管理</el-menu-item>
           <el-menu-item index="1-2">添加账号</el-menu-item>
-          <el-menu-item index="1-2">密码修改</el-menu-item>          
+          <el-menu-item index="1-3">密码修改</el-menu-item>          
         </el-submenu>   
         <!-- 第7个菜单 -->
         <el-submenu index="7">
           <template slot="title">
-            <i class="el-icon-location"></i>
+            
             <span>会员管理</span>
           </template>
           <el-menu-item index="1-1">账号管理</el-menu-item>
@@ -84,13 +90,13 @@
         <!-- 第8个菜单 -->
         <el-submenu index="8">
           <template slot="title">
-            <i class="el-icon-location"></i>
+            
             <span>系统管理</span>
           </template>
           <el-menu-item index="1-1">系统信息</el-menu-item>
           <el-menu-item index="1-2">系统配置</el-menu-item>
           <el-menu-item index="1-3">权限管理</el-menu-item>
-          <el-menu-item index="1-3">添加管理组</el-menu-item>          
+          <el-menu-item index="1-4">添加管理组</el-menu-item>          
         </el-submenu>                 
       </el-menu>
     </el-aside>
@@ -124,27 +130,6 @@ export default {
 
 <style scoped>
 /* scoped 作用域限定样式只在当前组件生效 */
-.el-header,
-.el-footer {
-  background-color: #b3c0d1;
-  color: #333;
-  text-align: center;
-  line-height: 60px;
-}
-.el-aside {
-  background-color: #d3dce6;
-  color: #333;
-  text-align: center;
-  line-height: 200px;
-}
-.el-main {
-  background-color: #e9eef3;
-  color: #333;
-  text-align: center;
-  line-height: 160px;
-}
-body > .el-container {
-  margin-bottom: 40px;
-}
+
 </style>
 

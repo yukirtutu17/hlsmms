@@ -1,0 +1,91 @@
+/* -------------------------公共---------------------------- */
+body{
+    font-size:14px;
+}
+
+/* -------------------------左侧---------------------------- */
+
+/* 左侧栏 */
+.el-aside {
+  color: #333;
+  background:url(../images/leftBG_01.png) repeat-y;
+}
+/* 菜单 */
+.el-menu{
+    background-color:transparent;
+    border:none;
+    width:206px;/*最左边是24px,背景图宽230px */
+    margin-left:24px;/* 量出的  */
+}
+
+
+/* 标题 -home.vue内干掉小图标 */
+.el-submenu__title{
+    color: #fff;
+    background: url("../images/menuBG.png") repeat-x;
+    height: 33px;/* 背景图高33px  */
+    line-height: 33px;
+    text-align: right;
+    margin-bottom: 10px;
+    border-radius: 5px 0px 0px 5px;
+  }
+/* 小箭头-隐藏掉eleUI自带的箭头 */
+.el-submenu__icon-arrow{
+    display:none;
+}
+/* 子菜单 */
+.el-menu--inline{
+    margin-left:0px;
+}
+/* 子菜单的行高和高度    --必须加.el-submenu 否则层级不够不生效 */
+.el-submenu .el-menu-item{
+    height: 30px;
+    line-height: 30px;
+    border-radius: 5px 0px 0px 5px;
+    text-align: right;
+    padding: 0px 20px;
+    color: #aaa;
+    margin-bottom: 5px;
+}
+/* 鼠标经过和焦点样式 */ /* 技巧:右键->force state->√:hover  */
+.el-menu-item:hover, .el-menu-item:focus{
+    background-color: rgba(255, 255, 255, 0.3);
+}
+/* 激活的样式 */
+.el-menu-item.is-active{ /*交集选择器 */
+    color: rgb(255, 255, 255);
+    font-weight: bold;
+    background-color: rgba(255, 255, 255, 0.5);
+}
+/* 左侧的标题自定义样式 */
+#leftTitle{
+    color: #fff;
+}
+#leftTitle h1,#leftTitle p{
+    text-align: right;
+    padding-right: 20px;
+}
+#leftTitle h1{
+    font-size: 22px;
+    font-family: "黑体";
+}
+
+/* --------------------------右侧--------------------------- */
+
+.el-header,
+.el-footer {
+  background-color: #b3c0d1;
+  color: #333;
+  text-align: center;
+  line-height: 60px;
+}
+
+.el-main {
+    background-color: #e9eef3;
+    color: #333;
+    text-align: center;
+    line-height: 160px;
+  }
+  body > .el-container {
+    margin-bottom: 40px;
+  }
