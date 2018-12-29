@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Home from './views/Home.vue'
 //引入登录组件
 import Login from './views/Login.vue'
+
 Vue.use(Router)
 
 export default new Router({
@@ -13,17 +14,25 @@ export default new Router({
       component: Home
     },
     {
-      path:'/login',
-      name:'login',
-      component:Login
+      path: '/login',
+      name: 'login',
+      component: Login
     },
     {
-      path: '/about',
-      name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (about.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import(/* webpackChunkName: "about" */ './views/About.vue')
+      path: '/useradd',
+      //添加用户
+      // 异步加载：懒加载，在需要的时候才加载，目的是节省内存占用
+      component: () => import(/* webpackChunkName: "UserAdd" */ './views/UserAdd.vue')
+    },
+    //用户管理
+    {
+      path: '/userlist',
+      component: () => import(/* webpackChunkName: "UserList" */ './views/UserList.vue')
+    },
+    //密码修改
+    {
+      path: '/pwdedit',
+      component: () => import(/* webpackChunkName: "PwdEdit" */ './views/UserPwdEdit')
     }
   ]
 })

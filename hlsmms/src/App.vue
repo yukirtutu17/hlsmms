@@ -5,7 +5,6 @@
 </template>
 
 <script>
-import HelloWorld from "./components/HelloWorld.vue";
 
 export default {
   name: "app",
@@ -22,9 +21,9 @@ export default {
 </script>
 
 <style>
-/* 让背景有高度而能在login.vue设置背景颜色 */
-html,body,#app,#loginbox,#home{
-  height:100%;
+/* 让背景有高度而能在login.vue设置背景颜色  剪切到公共样式*/
+/* html,body,#app,#loginbox,#home,.el-aside{
+  min-height:100%;
   margin:0;
-}
+} */
 </style>

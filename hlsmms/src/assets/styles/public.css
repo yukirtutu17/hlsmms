@@ -2,7 +2,18 @@
 body{
     font-size:14px;
 }
+html,body,#app,#loginbox,#home{
+    min-height:100%;
+    margin:0;
+  }
 
+a{
+    color: #fff;
+    text-decoration: none;
+}
+.el-aside{
+    min-height: 100%;
+}
 /* -------------------------左侧---------------------------- */
 
 /* 左侧栏 */
@@ -108,7 +119,25 @@ body{
     margin-bottom: 10px;
     background-color:#dbe3ff;
 }
+/* 主体内容 */
+/* flex伸缩布局 */
+#mainContent{
+    display:flex;/* 开启伸缩布局 */
+    flex-wrap:wrap;/* 开启换行 */
+}
 
+/* 三个子元素（RT 、 RM、 RB）的宽度为100% */
+#mainContent>*{
+    width: 100%;
+}
   body > .el-container {
     margin-bottom: 40px;
   }
+  /* 修改表单元素的默认宽度100% */
+.el-input{
+    width: 30%;
+}
+/* 把下拉列表恢复为100% */
+.el-input--suffix{
+   width: 100%;
+}

@@ -1,101 +1,11 @@
 <template>
   <el-container id="home">
     <!-- 左侧 导航菜单-->
-    <el-aside width="230px">
-      <!-- 左侧顶部的标题 -->
-      <div id="leftTitle">
-        <h1>华联超市管理系统</h1>
-        <p>你好，Admin</p>
-        <p>
-          <a>管理首页</a> |
-          <a>退出系统</a>
-        </p>
-      </div>
-      <!-- 左侧菜单 -->
-      <el-menu default-active="2" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" :unique-opened="true">
-        <!-- 第1个菜单 -->
-        <el-submenu index="1">
-          <template slot="title">
-            <span>分类管理</span>
-          </template>
-          <el-menu-item index="1-1">分类管理</el-menu-item>
-          <el-menu-item index="1-2">添加分类</el-menu-item>
-        </el-submenu>
-
-        <!-- 第2个菜单 -->
-        <el-submenu index="2">
-          <template slot="title">
-            <span>商品管理</span>
-          </template>
-          <el-menu-item index="1-1">商品管理</el-menu-item>
-          <el-menu-item index="1-2">添加商品</el-menu-item>
-        </el-submenu>
-
-        <!-- 第3个菜单 -->
-        <el-submenu index="3">
-          <template slot="title">
-            <span>进货管理</span>
-          </template>
-          <el-menu-item index="1-1">库存管理</el-menu-item>
-          <el-menu-item index="1-2">添加库存</el-menu-item>
-        </el-submenu>
-
-        <!-- 第4个菜单 -->
-        <el-submenu index="4">
-          <template slot="title">
-            <span>出货管理</span>
-          </template>
-          <el-menu-item index="1-1">销售列表</el-menu-item>
-          <el-menu-item index="1-2">商品出库</el-menu-item>
-          <el-menu-item index="1-3">商品退货</el-menu-item>
-        </el-submenu>
-
-        <!-- 第5个菜单 -->
-        <el-submenu index="5">
-          <template slot="title">
-            <span>统计管理</span>
-          </template>
-          <el-menu-item index="1-1">销售统计</el-menu-item>
-          <el-menu-item index="1-2">进货统计</el-menu-item>
-        </el-submenu>
-
-        <!-- 第6个菜单 -->
-        <el-submenu index="6">
-          <template slot="title">
-            <span>账号管理</span>
-          </template>
-          <el-menu-item index="1-1">账号管理</el-menu-item>
-          <el-menu-item index="1-2">添加账号</el-menu-item>
-          <el-menu-item index="1-3">密码修改</el-menu-item>
-        </el-submenu>
-        <!-- 第7个菜单 -->
-        <el-submenu index="7">
-          <template slot="title">
-            <span>会员管理</span>
-          </template>
-          <el-menu-item index="1-1">账号管理</el-menu-item>
-          <el-menu-item index="1-2">添加账号</el-menu-item>
-        </el-submenu>
-
-        <!-- 第8个菜单 -->
-        <el-submenu index="8">
-          <template slot="title">
-            <span>系统管理</span>
-          </template>
-          <el-menu-item index="1-1">系统信息</el-menu-item>
-          <el-menu-item index="1-2">系统配置</el-menu-item>
-          <el-menu-item index="1-3">权限管理</el-menu-item>
-          <el-menu-item index="1-4">添加管理组</el-menu-item>
-        </el-submenu>
-      </el-menu>
-    </el-aside>
-    <!-- 右侧 -->
-    <el-container>
-      <!-- 页头 -->
-      <el-header height="auto">
-        <h1>你好,Admin</h1>
-        <p>查看详细的系统信息</p>
-      </el-header>
+    <LeftMenu></LeftMenu>
+    <!-- 右侧 --><!-- 伸缩布局 -->
+    <el-container id="mainContent">
+      <!-- 顶部 -->
+      <RightTop></RightTop>
       <!-- 中间内容 -->
       <el-main>
         <el-card class="box-card">
@@ -146,20 +56,21 @@
           </div>
         </el-card>
       </el-main>
-
-      <!-- 页脚 -->
-      <el-footer height="50px">
-        <p>&copy;Copyright2018华联超市管理系统</p>
-      </el-footer>
+      <!-- 底部 -->
+      <RightBottom></RightBottom>
     </el-container>
   </el-container>
 </template>
 
 <script>
+// 引入导航组件
+import LeftMenu from "../components/leftMenu";
+import RightTop from "../components/rightTop";
+import RightBottom from "../components/rightBottom";
+
 export default {
   data() {
     return {
-      isOpened: true,
       tableData: [
         { goodsname: "海飞丝去屑洗发水", salenum: 8 },
         { goodsname: "茅台酒", salenum: 6 },
@@ -169,15 +80,11 @@ export default {
       tableData2: [{ nogood: "我的优乐美", goodnum: 0, handle: "入库" }]
     };
   },
-  components: {},
-  //菜单展开和收起的方法
-  methods: {
-    handleOpen(key, keyPath) {
-      //console.log(key, keyPath);
-    },
-    handleClose(key, keyPath) {
-      //console.log(key, keyPath);
-    }
+  components: {
+    //注册组件
+    LeftMenu,
+    RightTop,
+    RightBottom
   }
 };
 </script>
