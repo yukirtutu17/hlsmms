@@ -16,8 +16,7 @@
           <div class="text item">
             <!-- 模板内容-插入Login.vue表单模板 -->
             <!-- 表单组件:登录的表单 增加标签对齐方式为顶部对齐-->
-            <el-form :model="ruleForm2" status-icon :rules="rules2" ref="ruleForm2" label-width="100px" class="demo-ruleForm" 
-              label-position="top">
+            <el-form :model="ruleForm2" status-icon :rules="rules2" ref="ruleForm2" label-width="100px" class="demo-ruleForm" label-position="top">
               <el-form-item label="用户名:" prop="username">
                 <el-input type="text" v-model="ruleForm2.username" autocomplete="off"></el-input>
               </el-form-item>
@@ -72,8 +71,8 @@ export default {
       ruleForm2: {
         pass: "",
         username: "",
-        passCheck:"",
-        usergroup:""
+        passCheck: "",
+        usergroup: ""
       },
       //到elementUI拷贝验证规则进行修改
       //验证规则
@@ -133,7 +132,40 @@ export default {
           //alert("表单验证成功啦!!");
           //发起ajax请求去后端做数据库验证
           //使用路由对象push实现跳转到首页Home
-          this.$router.push("/");
+          //this.$router.push("/");
+          
+          //实现用户添加功能!!!!
+          //1）获取用户数据
+          console.log(this.ruleForm2);
+          //2）使用axios发送请求到后端api:   http://172.16.4.254:9090/user/useradd
+          this.axios
+            .post(
+              "http://172.16.4.243:9090/user/useradd",
+              this.qs.stringify(this.ruleForm2) //使用qs处理post的参数
+            )
+            .then(result => {
+              console.log("服务器成功返回的结果", result);
+            //result   {"isOk":true,"code":1,"msg":"用户添加成功！"}
+
+              //3）根据返回的结果处理业务逻辑
+              if(result.data.isOk){
+              //添加成功
+              this.$message({
+                message: result.data.msg,
+                type: 'success'
+              });
+              setTimeout(() => {
+                this.$router.push("/userlist");
+              }, 100);
+            }
+            else{
+              //添加失败
+              this.$message.error(result.data.msg);
+            }
+            })
+            .catch(err => {
+              console.error("服务器错误返回的信息", err);
+            });
         } else {
           //alert("表单验证失败哦!!");
           return false;
@@ -151,6 +183,5 @@ export default {
 
 <style scoped>
 /* scoped 作用域限定样式只在当前组件生效 */
-
 </style>
 
