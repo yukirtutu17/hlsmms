@@ -32,7 +32,13 @@ conn.connect(err => {
     next();
 });
 * */
-//添加用户路由
+//通用的跨域路由
+router.all("*",(req,res,next)=>{
+    res.header("Access-Control-Allow-Origin","*");
+    next(); //放行执行下面的路由
+});
+
+//1. 添加用户路由-----------------------
 router.post("/useradd", (req, res) => {
     /*
    要接收的值
@@ -88,11 +94,27 @@ router.post("/useradd", (req, res) => {
     //res.send("接收到的值:"+username+"_"+pass+"_"+usergroup);
 });
 
+//2.获取用户列表的路由----------------------------
+router.get("/getusers",(req,res)=>{
+    //1. 构造sql语句    查询userinfo表
+    let sqlStr="select * from userinfo order by userid DESC"; //按用户id降序排列
+
+    //2. 执行SQL语句  users--形参
+    conn.query(sqlStr,(err,users)=>{
+      if(err){
+        throw err;
+      }
+      else{
+        //3. 返回查询的用户数据给前端---是对象数组
+        res.send(users);
+      }
+    })
+})
 
 /* GET users listing. */
 
-router.get('/', function (req, res, next) {
-    res.send('路由通了');
-});
+// router.get('/', function (req, res, next) {
+//     res.send('路由通了');
+// });
 
 module.exports = router;

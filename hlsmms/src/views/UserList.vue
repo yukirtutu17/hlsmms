@@ -16,27 +16,42 @@
           <div class="text item">
             <!-- 模板内容 table自定义列模板-->
             <el-table :data="tableData" style="width: 100%">
-              <el-table-column label="日期" width="180">
+
+              <!-- 编号userid -->
+              <el-table-column label="编号" width="180">
+                <template slot-scope="scope">
+                  {{ scope.row.userid }}
+                </template>
+              </el-table-column>
+
+              <!-- 账号 username-->
+              <el-table-column label="账号" width="180">
+                <template slot-scope="scope">
+                  {{ scope.row.username }}
+                </template>
+              </el-table-column>
+
+              <!-- 日期addData -->
+              <el-table-column label="添加日期" width="180">
                 <template slot-scope="scope">
                   <i class="el-icon-time"></i>
-                  <span style="margin-left: 10px">{{ scope.row.date }}</span>
+                  <span style="margin-left: 10px">{{ scope.row.addDate | foramtData }}</span>
                 </template>
               </el-table-column>
-              <el-table-column label="姓名" width="180">
+
+              <!-- 用户组 usergroup-->
+              <el-table-column label="用户组" width="180">
                 <template slot-scope="scope">
-                  <el-popover trigger="hover" placement="top">
-                    <p>姓名: {{ scope.row.name }}</p>
-                    <p>住址: {{ scope.row.address }}</p>
-                    <div slot="reference" class="name-wrapper">
-                      <el-tag size="medium">{{ scope.row.name }}</el-tag>
-                    </div>
-                  </el-popover>
+                  {{ scope.row.usergroup }}
                 </template>
               </el-table-column>
+
               <el-table-column label="操作">
                 <template slot-scope="scope">
-                  <el-button size="mini" @click="handleEdit(scope.$index, scope.row)"><i class="el-icon-edit"></i>编辑</el-button>
-                  <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)"><i class="el-icon-delete"></i>删除</el-button>
+                  <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">
+                    <i class="el-icon-edit"></i>编辑</el-button>
+                  <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">
+                    <i class="el-icon-delete"></i>删除</el-button>
                 </template>
               </el-table-column>
             </el-table>
@@ -55,30 +70,14 @@ import LeftMenu from "../components/leftMenu";
 import RightTop from "../components/rightTop";
 import RightBottom from "../components/rightBottom";
 
+//引入momentjs
+import moment from 'moment';
+
 export default {
   data() {
     return {
       tableData: [
-        {
-          date: "2016-05-02",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄"
-        },
-        {
-          date: "2016-05-04",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1517 弄"
-        },
-        {
-          date: "2016-05-01",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1519 弄"
-        },
-        {
-          date: "2016-05-03",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1516 弄"
-        }
+        //清空静态数据，数据动态从数据库中获取
       ]
     };
   },
@@ -94,6 +93,25 @@ export default {
     },
     handleDelete(index, row) {
       console.log(index, row);
+    }
+  },
+  //组件实例化之后执行的钩子  视图挂载完毕
+  created() {
+    this.axios
+      .get("http://127.0.0.1:9090/user/getusers")
+      .then(result => {
+        console.log("后端返回的数据", result.data);
+        //处理前端的业务逻辑 把后端处理的用户的数据赋值给tableData属性
+        this.tableData = result.data; //把返回的数据赋值给表格数据属性
+      //前端的vue会自动渲染视图【自动】
+      })
+      .catch(err => {
+        console.error(err.message);
+      });
+  },
+  filters: {
+    foramtData(oldDate) {
+      return moment(oldDate).format("YYYY年MM月DD日");
     }
   }
 };
