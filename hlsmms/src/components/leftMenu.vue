@@ -16,8 +16,8 @@
                 <template slot="title">
                     <span>分类管理</span>
                 </template>
-                <el-menu-item index="1-1">分类管理</el-menu-item>
-                <el-menu-item index="1-2">添加分类</el-menu-item>
+                <el-menu-item index="/sortmanage"><router-link to="/sortmanage">分类管理</router-link></el-menu-item>
+                <el-menu-item index="/manageadd"><router-link to="/manageadd">添加分类</router-link></el-menu-item>
             </el-submenu>
 
             <!-- 第2个菜单 -->
@@ -25,8 +25,8 @@
                 <template slot="title">
                     <span>商品管理</span>
                 </template>
-                <el-menu-item index="1-1">商品管理</el-menu-item>
-                <el-menu-item index="1-2">添加商品</el-menu-item>
+                <el-menu-item index="/goodsmanage"><router-link to="/goodsmanage">商品管理</router-link></el-menu-item>
+                <el-menu-item index="/goodsadd"><router-link to="/goodsadd">添加商品</router-link></el-menu-item>
             </el-submenu>
 
             <!-- 第3个菜单 -->
@@ -34,8 +34,8 @@
                 <template slot="title">
                     <span>进货管理</span>
                 </template>
-                <el-menu-item index="1-1">库存管理</el-menu-item>
-                <el-menu-item index="1-2">添加库存</el-menu-item>
+                <el-menu-item index="/stockmanage"><router-link to="/stockmanage">库存管理</router-link></el-menu-item>
+                <el-menu-item index="/stockadd"><router-link to="/stockadd">添加库存</router-link></el-menu-item>
             </el-submenu>
 
             <!-- 第4个菜单 -->
@@ -43,9 +43,9 @@
                 <template slot="title">
                     <span>出货管理</span>
                 </template>
-                <el-menu-item index="1-1">销售列表</el-menu-item>
-                <el-menu-item index="1-2">商品出库</el-menu-item>
-                <el-menu-item index="1-3">商品退货</el-menu-item>
+                <el-menu-item index="/marketlist"><router-link to="/marketlist">销售列表</router-link></el-menu-item>
+                <el-menu-item index="/output"><router-link to="/output">商品出库</router-link></el-menu-item>
+                <el-menu-item index="/returngoods"><router-link to="/returngoods">商品退货</router-link></el-menu-item>
             </el-submenu>
 
             <!-- 第5个菜单 -->
@@ -53,8 +53,8 @@
                 <template slot="title">
                     <span>统计管理</span>
                 </template>
-                <el-menu-item index="1-1">销售统计</el-menu-item>
-                <el-menu-item index="1-2">进货统计</el-menu-item>
+                <el-menu-item index="/marketstats"><router-link to="/marketstats">销售统计</router-link></el-menu-item>
+                <el-menu-item index="/stockstats"><router-link to="/stockstats">进货统计</router-link></el-menu-item>
             </el-submenu>
 
             <!-- 第6个菜单 -->
@@ -71,8 +71,8 @@
                 <template slot="title">
                     <span>会员管理</span>
                 </template>
-                <el-menu-item index="1-1">账号管理</el-menu-item>
-                <el-menu-item index="1-2">添加账号</el-menu-item>
+                <el-menu-item index="/memberlist"><router-link to="/memberlist">账号管理</router-link></el-menu-item>
+                <el-menu-item index="/memberadd"><router-link to="/memberadd">添加账号</router-link></el-menu-item>
             </el-submenu>
 
             <!-- 第8个菜单 -->
@@ -80,7 +80,7 @@
                 <template slot="title">
                     <span>系统管理</span>
                 </template>
-                <el-menu-item index="1-1">系统信息</el-menu-item>
+                <el-menu-item index="/"><router-link to="/">系统信息</router-link></el-menu-item>
                 <el-menu-item index="1-2">系统配置</el-menu-item>
                 <el-menu-item index="1-3">权限管理</el-menu-item>
                 <el-menu-item index="1-4">添加管理组</el-menu-item>

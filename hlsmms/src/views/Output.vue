@@ -10,7 +10,7 @@
       <el-main>
         <el-card class="box-card">
           <div slot="header" class="clearfix">
-            <h3>系统信息</h3>
+            <h3>商品出库</h3>
           </div>
           <div class="text item">
            <!-- 模板内容 -->
