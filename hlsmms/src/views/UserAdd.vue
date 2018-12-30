@@ -140,7 +140,7 @@ export default {
           //2）使用axios发送请求到后端api:   http://172.16.4.254:9090/user/useradd
           this.axios
             .post(
-              "http://172.16.4.243:9090/user/useradd",
+              "http://127.0.0.1:9090/user/useradd",
               this.qs.stringify(this.ruleForm2) //使用qs处理post的参数
             )
             .then(result => {

@@ -39,7 +39,7 @@ app.use(function(err, req, res, next) {
 });
 //修改监听
 app.listen(9090,()=>{
-  console.log("http://172.16.4.243:9090/");
+  console.log("http://127.0.0.1:9090/");
 })
 
 
