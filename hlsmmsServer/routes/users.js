@@ -135,6 +135,21 @@ router.get("/deluser",(req,res)=>{
     });
 });
 
+//获取单个用户的信息的路由(根据userid)
+router.get("/getuserbyid",(req,res)=>{
+    //3)后端——接收用户的id，根据id执行sql查询，获取旧数据
+    let userid=req.query.userid;
+    let sqlStr="select * from userinfo where userid="+userid;//直接拼接
+    //执行查询
+    conn.query(sqlStr,(err,oldUserData)=>{
+        if(err){
+            throw err;
+        }else{
+     //4)后端——把查询到旧数据返回前端
+     res.send(oldUserData);      
+        }
+    });
+})
 
 /* GET users listing. */
 

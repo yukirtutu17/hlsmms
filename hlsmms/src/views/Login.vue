@@ -109,8 +109,5 @@ export default {
 .el-card__header {
   padding: 0px 20px !important;
 }
-.el-button--default {
-  margin-left: 200px !important;
-}
 </style>
 
