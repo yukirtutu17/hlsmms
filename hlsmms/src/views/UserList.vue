@@ -60,36 +60,37 @@
       </el-main>
       <!-- 底部 -->
       <RightBottom></RightBottom>
-      <!-- 修改用户资料的对话框 eleUI拷贝-->
-      <el-dialog title="提示" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
-      <!-- 拷贝☆useradd.vue☆的表单 还需拷贝script的代码-->
-                  <el-form :model="ruleForm2" status-icon :rules="rules2" ref="ruleForm2" label-width="100px" class="demo-ruleForm" label-position="top">
-              <el-form-item label="用户名:" prop="username">
-                <el-input type="text" v-model="ruleForm2.username" autocomplete="off"></el-input>
-              </el-form-item>
 
-              <el-form-item label="密码:" prop="userpwd">
-                <el-input type="text" v-model="ruleForm2.userpwd" autocomplete="off"></el-input>
-              </el-form-item>
+    </el-container>
+          <!-- 修改用户资料的对话框 eleUI拷贝-->
+      <el-dialog title="提示" :visible.sync="dialogVisible" width="30%" :before-close="handleClose"  id="mydailog">
+        <!-- 拷贝☆useradd.vue☆的表单 还需拷贝script的代码-->
+        <el-form :model="ruleForm2" status-icon :rules="rules2" ref="ruleForm2" label-width="100px" class="demo-ruleForm" label-position="right">
+          <el-form-item label="用户名:" prop="username">
+            <el-input type="text" v-model="ruleForm2.username" autocomplete="off"></el-input>
+          </el-form-item>
 
-              <!-- elementUI找Form 表单  -v-model改成:model一致 -->
-              <el-form-item label="选择用户组" prop="usergroup">
-                <el-select v-model="ruleForm2.usergroup" placeholder="请选择用户组">
-                  <el-option label="超级管理员" value="超级管理员"></el-option>
-                  <el-option label="普通管理员" value="普通管理员"></el-option>
-                </el-select>
-              </el-form-item>
+          <el-form-item label="密码:" prop="userpwd">
+            <el-input type="text" v-model="ruleForm2.userpwd" autocomplete="off"></el-input>
+          </el-form-item>
 
-              <!-- <el-form-item>
+          <!-- elementUI找Form 表单  -v-model改成:model一致 -->
+          <el-form-item label="选择用户组" prop="usergroup">
+            <el-select v-model="ruleForm2.usergroup" placeholder="请选择用户组">
+              <el-option label="超级管理员" value="超级管理员"></el-option>
+              <el-option label="普通管理员" value="普通管理员"></el-option>
+            </el-select>
+          </el-form-item>
+
+          <!-- <el-form-item>
                 <el-button type="primary" @click="submitForm('ruleForm2')">添加</el-button>
               </el-form-item> -->
-            </el-form>
+        </el-form>
         <span slot="footer" class="dialog-footer">
           <el-button @click="dialogVisible = false">取 消</el-button>
-          <el-button type="primary" @click="dialogVisible = false">确定修改</el-button>
+          <el-button type="primary" @click="submitForm('ruleForm2')">确定修改</el-button>
         </span>
       </el-dialog>
-    </el-container>
   </el-container>
 </template>
 
@@ -110,12 +111,13 @@ export default {
         //scope.row就是一行数据(数据对象)
         //清空静态数据，数据动态从数据库中获取
       ],
-      dialogVisible: false, //控制对话框的显示true和隐藏false   
+      dialogVisible: false, //控制对话框的显示true和隐藏false
       //数据对象
       ruleForm2: {
         userpwd: "",
         username: "",
-        usergroup: ""
+        usergroup: "",
+        userid: 0
       },
       //到elementUI拷贝验证规则进行修改
       //验证规则
@@ -145,7 +147,7 @@ export default {
         usergroup: [
           { required: true, trigger: "change", message: "请选择用户组" }
         ]
-      }         
+      }
     };
   },
   components: {
@@ -155,6 +157,48 @@ export default {
     RightBottom
   },
   methods: {
+    //拷贝 useradd.vue :提交表单的方法
+    //提交表单的方法
+    submitForm(formName) {
+      //调用组件的验证方法提交表单验证
+      this.$refs[formName].validate(valid => {
+        //valid参数表示验证的结果,true表示验证通过false表示验证失败
+        if (valid) {
+          //1）获取用户数据
+          console.log(this.ruleForm2);
+          //2）使用axios发送请求到后端api:   http://172.16.4.254:9090/user/useradd
+          this.axios
+            .post(
+              "http://127.0.0.1:9090/user/usersave",
+              this.qs.stringify(this.ruleForm2) //使用qs处理post的参数
+            )
+            .then(result => {
+              //result   {"isOk":true,"code":1,"msg":"用户添加成功！"}
+              //3）根据返回的结果处理业务逻辑
+              if (result.data.isOk) {
+                //添加成功
+                this.$message({
+                  message: result.data.msg,
+                  type: "success"
+                });
+                //修改完毕 关闭对话框
+                this.dialogVisible = false;
+                //调用获取数据的方法更新数据列表
+                this.getusers();
+              } else {
+                //添加失败
+                this.$message.error(result.data.msg);
+              }
+            })
+            .catch(err => {
+              this.$message.error("错了哦" + err.message);
+            });
+        } else {
+          //alert("表单验证失败哦!!");
+          return false;
+        }
+      });
+    },
     //6)-2组件实例化之后执行的钩子内的代码进行封装 方便下面两次调用
     getusers() {
       this.axios
@@ -183,11 +227,11 @@ export default {
           //5.1准备模态框 eleUI对话框  <el-dialog></el-dialog>放在底部下面 script内的也要复制
           //5.2使用双向数据绑定回填数据
           //显示eleUI拷贝的对话框 把false改成true
-        this.dialogVisible=true;  //显示对话框          
+          this.dialogVisible = true; //显示对话框
         })
         .catch(err => {
           //调用eleUI代码
-        this.$message.error('出错了：'+err.message); //调用消息框给用户提示          
+          this.$message.error("出错了：" + err.message); //调用消息框给用户提示
         });
     },
 
@@ -225,13 +269,13 @@ export default {
         });
     },
     //关闭对话框的确认方法-拷贝
-   handleClose(done) {
-        this.$confirm('确认关闭？')
-          .then(_ => {
-            done();
-          })
-          .catch(_ => {});
-   } 
+    handleClose(done) {
+      this.$confirm("确认关闭？")
+        .then(_ => {
+          done();
+        })
+        .catch(_ => {});
+    }
   },
   //组件实例化之后执行的钩子  视图挂载完毕
   created() {

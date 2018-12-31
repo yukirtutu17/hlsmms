@@ -129,15 +129,19 @@ a{
 /* 三个子元素（RT 、 RM、 RB）的宽度为100% */
 #mainContent>*{
     width: 100%;
+    max-height: 450px;    
 }
   body > .el-container {
     margin-bottom: 40px;
   }
-  /* 修改表单元素的默认宽度100% */
+/* 修改表单元素的默认宽度100% */
 .el-input{
     width: 30%;
 }
 /* 把下拉列表恢复为100% */
 .el-input--suffix{
    width: 100%;
+}
+#mydailog .el-input{
+    width: 90%;
 }

@@ -15,7 +15,7 @@ const conn = mysql.createConnection({
 //打开数据库链接
 conn.connect(err => {
     if (err) {
-        console.log("× 数据库链接失败！",err.message);
+        console.log("× 数据库链接失败！", err.message);
     }
     else {
         console.log("√ 数据库链接成功！");
@@ -33,8 +33,8 @@ conn.connect(err => {
 });
 * */
 //通用的跨域路由
-router.all("*",(req,res,next)=>{
-    res.header("Access-Control-Allow-Origin","*");
+router.all("*", (req, res, next) => {
+    res.header("Access-Control-Allow-Origin", "*");
     next(); //放行执行下面的路由
 });
 
@@ -95,61 +95,90 @@ router.post("/useradd", (req, res) => {
 });
 
 //2.获取用户列表的路由----------------------------
-router.get("/getusers",(req,res)=>{
+router.get("/getusers", (req, res) => {
     //1. 构造sql语句    查询userinfo表
-    let sqlStr="select * from userinfo order by userid DESC"; //按用户id降序排列
+    let sqlStr = "select * from userinfo order by userid DESC"; //按用户id降序排列
 
     //2. 执行SQL语句  users--形参
-    conn.query(sqlStr,(err,users)=>{
-      if(err){
-        throw err;
-      }
-      else{
-        //3. 返回查询的用户数据给前端---是对象数组
-        res.send(users);
-      }
+    conn.query(sqlStr, (err, users) => {
+        if (err) {
+            throw err;
+        }
+        else {
+            //3. 返回查询的用户数据给前端---是对象数组
+            res.send(users);
+        }
     })
 });
 
 //删除用户的路由
-router.get("/deluser",(req,res)=>{
+router.get("/deluser", (req, res) => {
     //3)后端-接收要删除的id
-    let userid=req.query.userid;
+    let userid = req.query.userid;
     //4)后端-连接数据库，构造sql语句，执行sql删除命令 delete from 表名 where 条件
     /*let sqlStr="delete from userinfo where userid=?";
       let sqlParams=[userid]; ↓*/
-    let sqlStr=`delete from userinfo where userid=${userid}`;
+    let sqlStr = `delete from userinfo where userid=${userid}`;
     //连接数据库
-    conn.query(sqlStr,(err,result)=>{
-    //5)后端-根据是否删除成功返回一个json结果给前端   
-        if(err){
+    conn.query(sqlStr, (err, result) => {
+        //5)后端-根据是否删除成功返回一个json结果给前端   
+        if (err) {
             throw err;
-        }else{
+        } else {
             //result对象中有属性 affectedRows: 1, 受影响的行数
-            if(result.affectedRows>0){
-                res.json({"isOk":true,"msg":"用户删除成功"})
-            }else{
-                res.json({"isOk":false,"msg":"用户删除失败"})
+            if (result.affectedRows > 0) {
+                res.json({ "isOk": true, "msg": "用户删除成功" })
+            } else {
+                res.json({ "isOk": false, "msg": "用户删除失败" })
             }
         }
     });
 });
 
 //获取单个用户的信息的路由(根据userid)
-router.get("/getuserbyid",(req,res)=>{
+router.get("/getuserbyid", (req, res) => {
     //3)后端——接收用户的id，根据id执行sql查询，获取旧数据
-    let userid=req.query.userid;
-    let sqlStr="select * from userinfo where userid="+userid;//直接拼接
+    let userid = req.query.userid;
+    let sqlStr = "select * from userinfo where userid=" + userid;//直接拼接
     //执行查询
-    conn.query(sqlStr,(err,oldUserData)=>{
-        if(err){
+    conn.query(sqlStr, (err, oldUserData) => {
+        if (err) {
             throw err;
-        }else{
-     //4)后端——把查询到旧数据返回前端
-     res.send(oldUserData);      
+        } else {
+            //4)后端——把查询到旧数据返回前端
+            res.send(oldUserData);
         }
     });
 })
+//修改用户资料的路由
+router.post("/usersave", (req, res) => {
+    //3)后端——接收新的的数据，根据用户id执行更新 update 表名 set 字段=新的值 where 条件
+    /*userpwd: "",
+    username: "",
+    usergroup: ''*/
+    let { username, userpwd, usergroup, userid } = req.body;
+    //let sqlStr="update userinfo set username='?',userpwd='?',usergroup='?' where userid=?";
+    //参数数组在替换是会自动添加单引号，所有我们自己构造sql是不用再加单引号
+    let sqlStr = "update userinfo set username=?,userpwd=?,usergroup=? where userid=?";
+    let sqlParams = [username, userpwd, usergroup, userid];
+
+    conn.query(sqlStr, sqlParams, (err, result) => {
+        if (err) {
+            throw err;
+        }
+        else {
+            //4)后端——根据执行的结果（受影响的行数）返回json给前端
+            if (result.affectedRows > 0) {
+                res.json({ "isOk": true, "msg": "用户修改成功！" })
+            } else {
+                res.json({ "isOk": false, "msg": "用户修改失败！" })
+
+            }
+        }
+    })
+});
+
+
 
 /* GET users listing. */
 
