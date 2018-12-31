@@ -109,7 +109,32 @@ router.get("/getusers",(req,res)=>{
         res.send(users);
       }
     })
-})
+});
+
+//删除用户的路由
+router.get("/deluser",(req,res)=>{
+    //3)后端-接收要删除的id
+    let userid=req.query.userid;
+    //4)后端-连接数据库，构造sql语句，执行sql删除命令 delete from 表名 where 条件
+    /*let sqlStr="delete from userinfo where userid=?";
+      let sqlParams=[userid]; ↓*/
+    let sqlStr=`delete from userinfo where userid=${userid}`;
+    //连接数据库
+    conn.query(sqlStr,(err,result)=>{
+    //5)后端-根据是否删除成功返回一个json结果给前端   
+        if(err){
+            throw err;
+        }else{
+            //result对象中有属性 affectedRows: 1, 受影响的行数
+            if(result.affectedRows>0){
+                res.json({"isOk":true,"msg":"用户删除成功"})
+            }else{
+                res.json({"isOk":false,"msg":"用户删除失败"})
+            }
+        }
+    });
+});
+
 
 /* GET users listing. */
 
