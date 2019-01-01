@@ -142,6 +142,6 @@ a{
 .el-input--suffix{
    width: 100%;
 }
-#mydailog .el-input{
+#mydailog .el-input,#login .el-input{
     width: 90%;
 }
