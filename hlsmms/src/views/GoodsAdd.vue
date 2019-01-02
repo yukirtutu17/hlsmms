@@ -21,14 +21,16 @@
                 <el-select v-model="ruleForm.classname" placeholder="---选择分类---">
                   <el-option label="日用品" value="日用品"></el-option>
                   <el-option label="美食" value="美食"></el-option>
-                  <el-option label="饮料酒水" value="饮料酒水"></el-option>
+                  <el-option label="酒水" value="酒水"></el-option>
+                  <el-option label="饮料" value="饮料"></el-option>
                   <el-option label="服饰" value="服饰"></el-option>
                 </el-select>
               </el-form-item>
 
               <!-- 生成条形码 -->
               <el-form-item label="商品条形码" prop="barcode">
-                <el-input v-model="ruleForm.barcode"></el-input> <el-button type="success" @click="createBarcode()">生成条码</el-button>
+                <el-input v-model="ruleForm.barcode"></el-input>
+                <el-button type="success" @click="createBarcode()">生成条码</el-button>
               </el-form-item>
 
               <el-form-item label="商品名称:" prop="goodsname">
@@ -144,7 +146,42 @@ export default {
             .post(this.apiHost + "/goods/add", this.qs.stringify(this.ruleForm))
             .then(result => {
               console.log("后端返回的结果", result);
-              //4）前端——根据后端的json处理业务逻辑
+              //4）前端——根据后端的json处理业务逻辑  {"isOk":true,"msg":"商品添加成功!"}
+                if (result.data.isOk) {
+                this.$message({
+                  message: "恭喜你，"+result.data.msg,
+                  type: "success"
+                });
+               //成功后弹出继续添加还是不添加，添加停留当前页面，不添加去管理列表页面
+                //确认对话框的内容
+            this.$confirm(result.data.msg+', 是否继续添加?', '提示', {
+                  confirmButtonText: '确定',
+                  cancelButtonText: '取消',
+                  type: 'warning'
+                }).then(() => {
+                //确认执行的操作
+                //重置表单
+              this.ruleForm={
+                    classname: "",
+                    barcode: "",
+                    goodsname: "",
+                    saleprice: 0,
+                    marketprice: 0,
+                    costprice: 0,
+                    stocknum: 0,
+                    weight: "",
+                    unit: "",
+                    isdiscount: "1",
+                    ispromotion: "0",
+                    details: ""
+                  };
+            }).catch(() => {
+                  //取消执行的操作
+                  this.$router.push("/goodsmanage");     
+                });
+              } else {
+                this.$message.error("错了哦，"+result.data.msg);
+              }
             })
             .catch(err => {
               console.error(err.message);

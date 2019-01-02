@@ -237,11 +237,17 @@ export default {
 
     //删除按钮执行的方法  把index删除 只要对象:row:指每一行这个对象
     handleDelete(userid) {
+            this.$confirm("确认要删除该用户, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      }).then(() => {
+          //确认删除执行的动作
       //1）前端—点击删除按钮：绑定事件执行删除的方法，根据id执行删除
       console.log("删除用户的id", userid);
       //2)前端-发起ajax请求到后端
       this.axios
-        .get("http://127.0.0.1:9090/user/deluser?userid=" + userid)
+        .get(this.apiHost + "/user/deluser?userid=" + userid)
         .then(result => {
           console.log("服务器返回的结果", result); //{"isOk":true,"code":1,"msg":"用户删除成功!"}
           //6)前端-根据返回的结果处理业务逻辑（删除成功就更新用户列表）
@@ -267,6 +273,7 @@ export default {
           //添加eleUI的消息提示代码
           his.$message.error("出错了：" + err.message); //调用消息框给用户提示
         });
+    }).catch(() => {});
     },
     //关闭对话框的确认方法-拷贝
     handleClose(done) {

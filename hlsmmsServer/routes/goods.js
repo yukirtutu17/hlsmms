@@ -1,42 +1,10 @@
 var express = require('express');
 var router = express.Router();
 
-//引入mssql模块
-const mysql = require('mysql');
+//引入自定义的数据库连接模块
+var conn=require("./conn");
 
-//数据库连接配置（创建数据库连接）
-const conn = mysql.createConnection({
-    host: 'localhost', //数据库主机名
-    user: 'root',         //数据库账号
-    password: 'ROOT',    //密码
-    database: 'hlsmms'      //使用哪个数据库
-});
 
-//打开数据库链接
-conn.connect(err => {
-    if (err) {
-        console.log("× 数据库链接失败！", err.message);
-    }
-    else {
-        console.log("√ 数据库链接成功！");
-    }
-});
-
-/* 百度的解决办法
-* app.all('*', function(req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "X-Requested-With");
-    res.header("Access-Control-Allow-Methods","PUT,POST,GET,DELETE,OPTIONS");
-    res.header("X-Powered-By",' 3.2.1')
-    res.header("Content-Type", "application/json;charset=utf-8");
-    next();
-});
-* */
-//通用的跨域路由
-// router.all("*", (req, res, next) => {
-//     res.header("Access-Control-Allow-Origin", "*");
-//     next(); //放行执行下面的路由
-// });
 //通用的跨域路由
 router.all("*",(req,res,next)=>{//*是所有请求的路由
     //res.header("Access-Control-Allow-Origin","*"); //携带cookie证书是，跨域不能使用通配符*就改成下面这个↓
@@ -45,28 +13,32 @@ router.all("*",(req,res,next)=>{//*是所有请求的路由
     next(); //放行执行下面的路由
 });
 
-//1. 添加商品路由--------------------------------------------------------------------------------
-router.post("/add", (req, res) => {
-
-    //res.header("Access-Control-Allow-Origin", "*");//后端设置响应头，允许跨域
-    //添加商品的路由中接收数据
+//添加商品的路由
+router.post("/add",(req,res)=>{
+    /*
+    *
+    OkPacket {
+    fieldCount: 0,
+    affectedRows: 1,  //受影响的行数，大于0表示执行成功
+    insertId: 2,
+    serverStatus: 2,
+    warningCount: 0,
+    message: '',
+    protocol41: true,
+    changedRows: 0 }
+    */
+    //2）后端——接收商品信息的数据，连接数据库执行sql语句 /goods/add
+    //接收数据
     let {classname,barcode,goodsname,saleprice,marketprice,costprice,stocknum,weight,unit,isdiscount,ispromotion,details}=req.body;
 
     //构造sql语句
-
-    //三个问号表示占位符，后期使用参数数组替换 添加商品的路由中构造sql语句和参数数组
-    let sqlStr="insert into goodinfo(classname,barcode,goodsname,saleprice,marketprice,costprice,stocknum,weight,unit,isdiscount,ispromotion,details) values(?,?,?,?,?,?,?,?,?,?,?,?)";
+    let sqlStr="insert into goodsinfo(classname,barcode,goodsname,saleprice,marketprice,costprice,stocknum,weight,unit,isdiscount,ispromotion,details) values(?,?,?,?,?,?,?,?,?,?,?,?)";
     let sqlParams=[classname,barcode,goodsname,saleprice,marketprice,costprice,stocknum,weight,unit,isdiscount,ispromotion,details];
-     //执行sql语句
-    //语法：conn.query("sql语句","参数数组",回调函数(err错误对象,result返回的结果)=>{});
-    conn.query(sqlStr, sqlParmas, (err, result) => {
-        //错误处理
-        if (err) {
+    conn.query(sqlStr,sqlParams,(err,result)=>{
+        if(err){
             throw err;
         }
-        else {
-
-            //根据执行的结果返回数据给前端
+        else{
             //3）后端——根据执行是否成功返回json给前端
             if(result.affectedRows>0){
                 res.json({"isOk":true,"msg":"商品添加成功!"});
@@ -74,16 +46,65 @@ router.post("/add", (req, res) => {
             else{
                 res.json({"isOk":false,"msg":"商品添加失败!"});
             }
+        }
+    })
+ });
 
+
+ //获取商品列表的路由
+router.get("/getgoods",(req,res)=>{
+    //2）后端——接收 商品分类和关键词
+    let {classname,keywords}=req.query;
+    //构造sql语句【全表】----------------------------------------------------------------------------
+    let sqlStr="select * from goodsinfo where 1=1"; //where 1=1永远成立，全表查询
+
+    //搜索--------------------------------------------------------------------------------------------
+    //3）后端——判断 商品分类和关键词 是否是有效的值，然后在拼接sql语句
+    //商品分类有值就执行拼接
+    if(classname){
+        sqlStr+=` and classname='${classname}'`; //字符串加引号
+    }
+    //关键词有值就执行拼接
+    if(keywords){
+        sqlStr+=` and (goodsname like '%${keywords}%' or barcode like '%${keywords}%')`; //商品名和条码二选一
+    }
+
+    //拼接排序的字句【排序】---------------------------------------------------------------------------
+    sqlStr+=" order by goodsid DESC";
+
+    //执行查询获取总的满足条件的记录数：一定要在分页之前查询才是总条数，否则查到的是pagesize的条数
+    let total=0;
+    conn.query(sqlStr,(err,goodsTotal)=>{
+        if(err){
+            throw err;
+        }
+        else{
+            total=goodsTotal.length;
         }
     });
-    //res.send("接收到的值:"+username+"_"+pass+"_"+usergroup);
-});
 
-//2.获取商品列表的路由-------------------------------------------------------------------------------------
-router.get("/getgoods",(req,res)=>{
-    res.send("获取商品列表的路由");
- });
+    //分页--------------------------------------------------------------------------------------------
+    let {pagesize,currentpage}=req.query;
+    console.log('pagesize',pagesize,'currentpage',currentpage);
+
+    //拼接分页的sql语句
+    //console.log(sqlStr);  验证拼接是否正常
+    //limit的语法: limit 跳过的条数，每页显示的条数
+    if(pagesize && currentpage){
+        let skip=(currentpage-1)*pagesize; //跳过的条数
+        sqlStr+=` limit ${skip},${pagesize}`;
+    }
+
+    //执行sql查询：4）后端——执行sql查询就是要搜索的结果，并把结果返回前端
+    conn.query(sqlStr,(err,goodsArray)=>{
+        if(err){
+            throw err;
+        }
+        else{
+            res.send({"total":total,"goodsArray":goodsArray}); //如果没有数据就是空数组，有数据就是数组对象
+        }
+    });
+});
  
 
 

@@ -1,26 +1,29 @@
 var express = require('express');
 var router = express.Router();
 
-//引入mssql模块
-const mysql = require('mysql');
+//引入自定义的数据库连接模块
+var conn=require("./conn");
 
-//数据库连接配置（创建数据库连接）
-const conn = mysql.createConnection({
-    host: 'localhost', //数据库主机名
-    user: 'root',         //数据库账号
-    password: 'ROOT',    //密码
-    database: 'hlsmms'      //使用哪个数据库
-});
+// //引入mssql模块
+// const mysql = require('mysql');
 
-//打开数据库链接
-conn.connect(err => {
-    if (err) {
-        console.log("× 数据库链接失败！", err.message);
-    }
-    else {
-        console.log("√ 数据库链接成功！");
-    }
-});
+// //数据库连接配置（创建数据库连接）
+// const conn = mysql.createConnection({
+//     host: 'localhost', //数据库主机名
+//     user: 'root',         //数据库账号
+//     password: 'ROOT',    //密码
+//     database: 'hlsmms'      //使用哪个数据库
+// });
+
+// //打开数据库链接
+// conn.connect(err => {
+//     if (err) {
+//         console.log("× 数据库链接失败！", err.message);
+//     }
+//     else {
+//         console.log("√ 数据库链接成功！");
+//     }
+// });
 
 /* 百度的解决办法
 * app.all('*', function(req, res, next) {
