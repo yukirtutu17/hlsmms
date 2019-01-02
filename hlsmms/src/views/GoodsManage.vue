@@ -15,33 +15,67 @@
           </div>
           <div class="text item">
             <!-- 模板内容 -->
-            <!-- 上部分 -->
-            <!-- 下部分 -->
-            <!-- 模板内容 table自定义列模板-->
-            <el-table :data="tableData" style="width: 100%">
+            <!-- 搜索 eleUI-form的行内表单调换位置-->
+            <div>
+              <!-- 设置 inline 属性可以让表单域变为行内的表单域 -->
+              <el-form :inline="true" :model="formSearch" class="demo-form-inline">
+                <el-form-item label="所属分类">
+                  <el-select v-model="formSearch.classname" placeholder="请选择">
+                    <el-option label="区域一" value="shanghai"></el-option>
+                    <el-option label="区域二" value="beijing"></el-option>
+                  </el-select>
+                </el-form-item>
 
-              <el-table-column label="姓名" width="180">
-                <template slot-scope="scope">
-                  <el-popover trigger="hover" placement="top">
-                    <p>姓名: {{ scope.row.name }}</p>
-                    <p>住址: {{ scope.row.address }}</p>
-                    <div slot="reference" class="name-wrapper">
-                      <el-tag size="medium">{{ scope.row.name }}</el-tag>
-                    </div>
-                  </el-popover>
-                </template>
-              </el-table-column>
-              <el-table-column label="操作">
-                <template slot-scope="scope">
-                  <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">
-                    <i class="el-icon-edit"></i>编辑</el-button>
-                  <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">
-                    <i class="el-icon-delete"></i>删除</el-button>
-                </template>
-              </el-table-column>
-            </el-table>
+                <el-form-item label="关键词">
+                  <el-input id="keywords" v-model="formSearch.keywords" placeholder="查询商品名称、条形码"></el-input>
+                </el-form-item>
+
+                <el-form-item>
+                  <el-button type="success" @click="onSearch()" icon="el-icon-search">查询</el-button>
+                </el-form-item>
+              </el-form>
+              <!-- 关键字加id-->
+              <!-- 查询内放一个放大镜图标,在type内改颜色  -->
+
+            </div>
+            <div id="searchBox"></div>
+            <!-- 管理列表 -->
+            <div>
+              <el-table :data="tableData" style="width: 100%">
+                <el-table-column label="日期" width="180">
+                  <template slot-scope="scope">
+                    <i class="el-icon-time"></i>
+                    <span style="margin-left: 10px">{{ scope.row.date }}</span>
+                  </template>
+                </el-table-column>
+                <el-table-column label="姓名" width="180">
+                  <template slot-scope="scope">
+                    <el-popover trigger="hover" placement="top">
+                      <p>姓名: {{ scope.row.name }}</p>
+                      <p>住址: {{ scope.row.address }}</p>
+                      <div slot="reference" class="name-wrapper">
+                        <el-tag size="medium">{{ scope.row.name }}</el-tag>
+                      </div>
+                    </el-popover>
+                  </template>
+                </el-table-column>
+                <el-table-column label="操作">
+                  <template slot-scope="scope">
+                    <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">
+                      <i class="el-icon-edit"></i> 编辑</el-button>
+                    <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">
+                      <i class="el-icon-delete"></i>删除</el-button>
+                  </template>
+                </el-table-column>
+              </el-table>
+            </div>
 
             <!-- 页码  -->
+            <!-- 设置background属性可以为分页按钮添加背景色。 -->
+            <div id="pagerBox">
+              <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[1,2,3,5,10,20,50,100]" :page-size="5" layout="total, sizes, prev, pager, next, jumper" background :total="36">
+              </el-pagination>
+            </div>
           </div>
         </el-card>
       </el-main>
@@ -60,6 +94,12 @@ import RightBottom from "../components/rightBottom";
 export default {
   data() {
     return {
+      //查询的表单
+      formSearch: {
+        //↓替换掉上面的名字
+        classname: "",
+        keywords: ""
+      },
       tableData: [
         {
           date: "2016-05-02",
@@ -96,6 +136,18 @@ export default {
     },
     handleDelete(index, row) {
       console.log(index, row);
+    },
+    //查询按钮执行的方法
+    onSearch() {
+      //上面的进行改名
+      console.log("submit!");
+    },
+    //分页执行的方法
+    handleSizeChange(val) {
+      console.log(`每页 ${val} 条`);
+    },
+    handleCurrentChange(val) {
+      console.log(`当前页: ${val}`);
     }
   }
 };

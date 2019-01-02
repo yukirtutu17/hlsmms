@@ -16,20 +16,22 @@ Vue.prototype.axios=axios;
 import qs from 'qs'
 //挂载原型方便后期的vue实例使用
 Vue.prototype.qs=qs;
+//配置后端服务器的主机
+let serverApiHost="http://127.0.0.1:9090";
+Vue.prototype.apiHost=serverApiHost;
 
 //构造全局守卫
-router.beforeEach((to, from, next) => {
+router.beforeEach((to, from, next) => {//to就是要进入的路由 
   //alert("全局守卫");
   //next(); //放行：只有登录成功的才放行
-
   //************************ 让ajax携带cookie证书********************************
   axios.defaults.withCredentials=true;
 
   //发起ajax到后端路由获取cookie，cookie存在就放行，否则去登录页面
-  axios.get("http://127.0.0.1:9090/user/getCookie").then(result=>{
+  axios.get(serverApiHost+"/user/getCookie").then(result=>{//更改
     console.log("验证的结果",result);
     //如果登录成或者是访问的页面时登录页面就放行
-    if(result.data.isOk || to.path=="/login"){
+    if(result.data.isOk || to.path=="/login"){//有cookie||访问登录页就放行
       next(); //录成功放行
     }
     //否则就跳转到登录页面

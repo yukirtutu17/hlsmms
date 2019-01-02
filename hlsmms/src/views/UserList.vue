@@ -169,7 +169,7 @@ export default {
           //2）使用axios发送请求到后端api:   http://172.16.4.254:9090/user/useradd
           this.axios
             .post(
-              "http://127.0.0.1:9090/user/usersave",
+            this.apiHost+"/user/usersave",              
               this.qs.stringify(this.ruleForm2) //使用qs处理post的参数
             )
             .then(result => {
@@ -202,7 +202,7 @@ export default {
     //6)-2组件实例化之后执行的钩子内的代码进行封装 方便下面两次调用
     getusers() {
       this.axios
-        .get("http://127.0.0.1:9090/user/getusers")
+        .get(this.apiHost+"/user/getusers")
         .then(result => {
           console.log("后端返回的数据", result.data);
           //处理前端的业务逻辑 把后端处理的用户的数据赋值给tableData属性
@@ -219,7 +219,7 @@ export default {
       //console.log("编辑的用户id",userid);
       //(2)前端——发起ajax请求到后端获取旧的数据
       this.axios
-        .get("http://127.0.0.1:9090/user/getuserbyid?userid=" + userid)
+        .get(this.apiHost+"/user/getuserbyid?userid=" + userid)
         .then(oldUserData => {
           console.log("服务器返回旧的数据", oldUserData);
           //5)前端——把旧的数据回填的表单中  data[0]才是需要的数据

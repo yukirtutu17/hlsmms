@@ -133,35 +133,34 @@ export default {
           //发起ajax请求去后端做数据库验证
           //使用路由对象push实现跳转到首页Home
           //this.$router.push("/");
-          
+
           //实现用户添加功能!!!!
           //1）获取用户数据
           console.log(this.ruleForm2);
           //2）使用axios发送请求到后端api:   http://172.16.4.254:9090/user/useradd
           this.axios
             .post(
-              "http://127.0.0.1:9090/user/useradd",
+              this.apiHost + "/user/useradd",
               this.qs.stringify(this.ruleForm2) //使用qs处理post的参数
             )
             .then(result => {
               console.log("服务器成功返回的结果", result);
-            //result   {"isOk":true,"code":1,"msg":"用户添加成功！"}
+              //result   {"isOk":true,"code":1,"msg":"用户添加成功！"}
 
               //3）根据返回的结果处理业务逻辑
-              if(result.data.isOk){
-              //添加成功
-              this.$message({
-                message: result.data.msg,
-                type: 'success'
-              });
-              setTimeout(() => {
-                this.$router.push("/userlist");
-              }, 100);
-            }
-            else{
-              //添加失败
-              this.$message.error(result.data.msg);
-            }
+              if (result.data.isOk) {
+                //添加成功
+                this.$message({
+                  message: result.data.msg,
+                  type: "success"
+                });
+                setTimeout(() => {
+                  this.$router.push("/userlist");
+                }, 100);
+              } else {
+                //添加失败
+                this.$message.error(result.data.msg);
+              }
             })
             .catch(err => {
               console.error("服务器错误返回的信息", err);

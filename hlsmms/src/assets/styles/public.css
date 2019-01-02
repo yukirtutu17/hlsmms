@@ -142,6 +142,28 @@ a{
 .el-input--suffix{
    width: 100%;
 }
+/* 对话框中的输入框 */
 #mydailog .el-input,#login .el-input{
     width: 90%;
+}
+
+/* 搜索框的关键词 */
+#keywords{
+    width: 300%;
+}
+
+/* 搜索盒子 */
+#searchBox{
+    border: solid 1px #ccc;
+    height: 1px;
+}
+
+/* 分页的盒子 */
+#pagerBox{
+    margin: 15px auto;
+}
+
+/* 修改当前激活页样式 */
+.el-pagination.is-background .el-pager li:not(.disabled).active{
+    background-color: #50b41a;
 }

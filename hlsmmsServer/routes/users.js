@@ -38,14 +38,14 @@ conn.connect(err => {
 //     next(); //放行执行下面的路由
 // });
 //通用的跨域路由
-router.all("*",(req,res,next)=>{
-    //res.header("Access-Control-Allow-Origin","*"); //携带cookie证书是，跨域不能使用通配符*
+router.all("*",(req,res,next)=>{//*是所有请求的路由
+    //res.header("Access-Control-Allow-Origin","*"); //携带cookie证书是，跨域不能使用通配符*就改成下面这个↓
     res.header("Access-Control-Allow-Origin","http://127.0.0.1:8080"); //允许携带cookie证书的域名
     res.header("Access-Control-Allow-Credentials",true);  //值是一个布尔值，表示是否允许发送Cookie
     next(); //放行执行下面的路由
 });
 
-//1. 添加用户路由-----------------------
+//1. 添加用户路由--------------------------------------------------------------------------------
 router.post("/useradd", (req, res) => {
     /*
    要接收的值
@@ -101,7 +101,7 @@ router.post("/useradd", (req, res) => {
     //res.send("接收到的值:"+username+"_"+pass+"_"+usergroup);
 });
 
-//2.获取用户列表的路由----------------------------
+//2.获取用户列表的路由-------------------------------------------------------------------------------------
 router.get("/getusers", (req, res) => {
     //1. 构造sql语句    查询userinfo表
     let sqlStr = "select * from userinfo order by userid DESC"; //按用户id降序排列
@@ -118,7 +118,7 @@ router.get("/getusers", (req, res) => {
     })
 });
 
-//删除用户的路由
+//删除用户的路由--------------------------------------------------------------------------------------------
 router.get("/deluser", (req, res) => {
     //3)后端-接收要删除的id
     let userid = req.query.userid;
@@ -142,7 +142,7 @@ router.get("/deluser", (req, res) => {
     });
 });
 
-//获取单个用户的信息的路由(根据userid)
+//获取单个用户的信息的路由(根据userid)---------------------------------------------------------
 router.get("/getuserbyid", (req, res) => {
     //3)后端——接收用户的id，根据id执行sql查询，获取旧数据
     let userid = req.query.userid;
@@ -157,7 +157,7 @@ router.get("/getuserbyid", (req, res) => {
         }
     });
 })
-//修改用户资料的路由
+//修改用户资料的路由---------------------------------------------------------
 router.post("/usersave", (req, res) => {
     //3)后端——接收新的的数据，根据用户id执行更新 update 表名 set 字段=新的值 where 条件
     /*userpwd: "",
@@ -185,7 +185,7 @@ router.post("/usersave", (req, res) => {
     })
 });
 
-//验证用户登录身份的路由
+//验证用户登录身份的路由---------------------------------------------------------
 router.post("/checkLogin",(req,res)=>{
     /*2）后端——接收账号和密码，根据账号和密码到数据库中查询
     Select * from userinfo where username=’账号’ and userpwd=’密码’
@@ -218,7 +218,7 @@ router.post("/checkLogin",(req,res)=>{
     });
 });
 
-//验证cookie是否存在
+//验证cookie是否存在---------------------------------------------------------
 router.get("/getCookie",(req,res)=>{
     let userid=req.cookies.userid;
     let username=req.cookies.username;
@@ -231,12 +231,17 @@ router.get("/getCookie",(req,res)=>{
     }
 });
 
-//清除cookie的路由
+//清除cookie的路由---------------------------------------------------------
 router.get("/loginOut",(req,res)=>{
     res.clearCookie("userid");
     res.clearCookie("username");
     res.send({"isOk":true});
 });
+
+
+//添加商品-------------拷贝上面添加用户进行更改-----------------------------------------------
+
+//管理商品列表------------------拷贝上面管理用户进行更改---------------------------------------
 
 
 /* GET users listing. */
